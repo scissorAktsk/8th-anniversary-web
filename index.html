@@ -30,7 +30,7 @@
     </div>
 
     <img class="cover" id="cover" src="assets/Cover.png"/>
-    <button id="loadingLabel" class="glow-on-hover" type="button" onclick="">Loading...</button>
+    <!-- <button id="loadingLabel" class="glow-on-hover" type="button" onclick="">Loading...</button> -->
     <button id="playButton" class="glow-on-hover" type="button" onclick="playVideos()">Enter Metaverse</button>
     
     <script>
@@ -51,11 +51,11 @@
 
     playButton.style.visibility = 'hidden';
 
-    recorded.load();
-    recorded.addEventListener('progress', function() {
-        recordedPercent = this.buffered.end(0) / this.duration;
-        loadingLabel.innerHtml = `Loading...${recordedPercent + originalPercent) * 50}%`;
-    });
+    // recorded.load();
+    // recorded.addEventListener('progress', function() {
+    //     recordedPercent = this.buffered.end(0) / this.duration;
+    //     loadingLabel.innerHtml = `Loading...${recordedPercent + originalPercent) * 50}%`;
+    // });
     recorded.addEventListener('loadeddata', function() {
         isRecordLoaded = true;
 
@@ -65,11 +65,11 @@
         }
     }, false);
 
-    original.load();
-    original.addEventListener('progress', function() {
-        originalPercent = this.buffered.end(0) / this.duration;
-        loadingLabel.innerHtml = `Loading...${recordedPercent + originalPercent) * 50}%`;
-    });
+    // original.load();
+    // original.addEventListener('progress', function() {
+    //     originalPercent = this.buffered.end(0) / this.duration;
+    //     loadingLabel.innerHtml = `Loading...${recordedPercent + originalPercent) * 50}%`;
+    // });
     original.addEventListener('loadeddata', function() {
         isOriginalLoaded = true;
 
