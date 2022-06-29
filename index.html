@@ -30,10 +30,12 @@
     </div>
 
     <img class="cover" id="cover" src="assets/Cover.png"/>
+    <label id="loadingLabel">Loading...</label>
     <button id="playButton" class="glow-on-hover" type="button" onclick="playVideos()">Enter Metaverse</button>
-
+    
     <script>
     var playButton = document.getElementById("playButton");
+    var loadingLabel = document.getElementById("loadingLabel");
     var cover = document.getElementById("cover");
     var recorded = document.getElementById("recorded");
     var original = document.getElementById("original");
@@ -44,10 +46,16 @@
     var isReality = true;
     var isRecordLoaded = false;
     var isOriginalLoaded = false;
+    var recordedPercent = 0;
+    var originalPercent = 0;
 
     playButton.style.visibility = 'hidden';
 
     recorded.load();
+    recorded.addEventListener('progress', function() {
+        recordedPercent = this.buffered.end(0) / this.duration;
+        loadingLabel.innerHtml = 'Loading...' + (recordedPercent + originalPercent)*50 + '%';
+    });
     recorded.addEventListener('loadeddata', function() {
         isRecordLoaded = true;
 
@@ -58,12 +66,17 @@
     }, false);
 
     original.load();
+    original.addEventListener('progress', function() {
+        originalPercent = this.buffered.end(0) / this.duration;
+        loadingLabel.innerHtml = 'Loading...' + (recordedPercent + originalPercent)*50 + '%';
+    });
     original.addEventListener('loadeddata', function() {
         isOriginalLoaded = true;
 
         if (isRecordLoaded)
         {
-            playButton.style.visibility = 'visible';    
+            loadingLabel
+            playButton.style.visibility = 'visible';
         }
     }, false);
 
