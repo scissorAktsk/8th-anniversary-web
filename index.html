@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8th Anniversary</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/glowButton.css">
+    <link href="http://fonts.cdnfonts.com/css/games" rel="stylesheet">
+</head>
+<body>
+    <div class="video-container">
+        <video autoplay muted id="original">
+            <source type="video/mp4" src="assets/PlayerOne Original.mp4">
+        </video>
+    </div>
+    <div class="video-container">
+        <video autoplay id="recorded">
+            <source type="video/mp4" src="assets/PlayerOne_OK.mp4">
+        </video>
+    </div>
+
+    <div class="navBar" id="navBar">
+        <img id="clickHint" src="assets/ClickHint.png" height="50px"/>
+        <div class="row">
+            <img id="windowImage" src="assets/PictureInPicture.png" width="50px" onclick="switchWindow()"/>
+            <img id="modeImage" src="assets/Day.png" width="50px" onclick="switchMode()"/>
+        </div>
+    </div>
+
+    <img class="cover" id="cover" src="assets/Cover.png"/>
+    <button id="playButton" class="glow-on-hover" type="button" onclick="playVideos()">Enter Metaverse</button>
+
+    <script>
+    var playButton = document.getElementById("playButton");
+    var cover = document.getElementById("cover");
+    var recorded = document.getElementById("recorded");
+    var original = document.getElementById("original");
+    var modeImage = document.getElementById("modeImage");
+    var windowImage = document.getElementById("windowImage");
+
+    var isFullscreen = false;
+    var isReality = true;
+    var isRecordLoaded = false;
+    var isOriginalLoaded = false;
+
+    playButton.style.visibility = 'hidden';
+
+    recorded.load();
+    recorded.addEventListener('loadeddata', function() {
+        isRecordLoaded = true;
+
+        if (isOriginalLoaded)
+        {
+            playButton.style.visibility = 'visible';    
+        }
+    }, false);
+
+    original.load();
+    original.addEventListener('loadeddata', function() {
+        isOriginalLoaded = true;
+
+        if (isRecordLoaded)
+        {
+            playButton.style.visibility = 'visible';    
+        }
+    }, false);
+
+    function playVideos() {
+        pictureInPicture();
+        recorded.currentTime = 0;
+        recorded.play();
+        original.currentTime = 0;
+        original.play();
+        playButton.style.display = 'none';
+        cover.style.display = 'none';
+    }
+
+    function fullScreen() {
+        var hide = isReality ? original : recorded;
+        var show = isReality ? recorded : original;
+
+        hide.style.transform = 'scale(0)';
+        hide.style.zIndex = 1;
+        
+        show.style.transform = 'scale(1) translate(-50%,-50%)';
+        show.style.zIndex = 2;
+
+        modeImage.src = show == recorded ? 'assets/Day.png' : 'assets/Night.png';
+    }
+
+    function pictureInPicture() {
+        var hide = isReality ? original : recorded;
+        var show = isReality ? recorded : original;
+
+        hide.style.transform = 'scale(0.2) translate(-18%,-72%)';
+        hide.style.zIndex = 2;
+        
+        show.style.transform = 'scale(1) translate(-55%,-50%)';
+        show.style.zIndex = 1;
+
+        modeImage.src = show == recorded ? 'assets/Day.png' : 'assets/Night.png';
+    }
+
+    function refreshVideo() {
+        if (isFullscreen) {
+            fullScreen();
+        }
+        else {
+            pictureInPicture();
+        }
+    }
+
+    function switchWindow() {
+        isFullscreen = !isFullscreen;
+        refreshVideo();
+        windowImage.src = isFullscreen ? 'assets/FullScreen.png' : 'assets/PictureInPicture.png';
+    }
+
+    function switchMode() {
+        isReality = !isReality;
+        refreshVideo();
+    }
+    
+    recorded.addEventListener('click', function () {
+        isReality = false;
+        refreshVideo();
+    });
+
+    original.addEventListener('click', function () {
+        isReality = true;
+        refreshVideo();
+    });
+
+    </script>
+</body>
+</html>
